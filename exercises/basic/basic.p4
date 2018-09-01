@@ -75,7 +75,7 @@ control TopPipe(inout Parsed_packet p,
                 inout digest_data_t digest_data,
                 inout sume_metadata_t sume_metadata) {
     action drop() {
-        mark_to_drop();
+        sume_metadata.dst_port = 0;
     }
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
