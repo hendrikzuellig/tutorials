@@ -1,6 +1,6 @@
 /* -*- P4_16 -*- */
 #include <core.p4>
-#include <v1model.p4>
+#include <sume_switch.p4>
 
 const bit<16> TYPE_IPV4 = 0x800;
 
@@ -33,73 +33,75 @@ header ipv4_t {
     ip4Addr_t dstAddr;
 }
 
-struct metadata {
-    /* empty */
+// List of all recognized headers
+struct Parsed_packet {
+    ethernet_t ethernet;
+    ipv4_t ipv4;
 }
 
-struct headers {
-    ethernet_t   ethernet;
-    ipv4_t       ipv4;
+// user defined metadata: can be used to share information between
+// TopParser, TopPipe, and TopDeparser
+struct user_metadata_t {
+    bit<8> unused;
+}
+
+// digest data, MUST be 256 bits
+struct digest_data_t {
+    bit<256>  unused;
 }
 
 /*************************************************************************
 *********************** P A R S E R  ***********************************
 *************************************************************************/
 
-parser MyParser(packet_in packet,
-                out headers hdr,
-                inout metadata meta,
-                inout standard_metadata_t standard_metadata) {
+@Xilinx_MaxPacketRegion(1024)
+parser TopParser(packet_in b,
+                out Parsed_packet p,
+                out user_metadata_t user_metadata,
+                out digest_data_t digest_data,
+                inout sume_metadata_t sume_metadata) {
 
     state start {
         transition parse_ethernet;
     }
 
     state parse_ethernet {
-        packet.extract(hdr.ethernet);
-        transition select(hdr.ethernet.etherType) {
+        b.extract(p.ethernet);
+        transition select(p.ethernet.etherType) {
             TYPE_IPV4: parse_ipv4;
             default: accept;
         }
     }
 
     state parse_ipv4 {
-        packet.extract(hdr.ipv4);
+        packet.extract(p.ipv4);
         transition accept;
     }
 
 }
 
 /*************************************************************************
-************   C H E C K S U M    V E R I F I C A T I O N   *************
-*************************************************************************/
-
-control MyVerifyChecksum(inout headers hdr, inout metadata meta) {   
-    apply {  }
-}
-
-
-/*************************************************************************
 **************  I N G R E S S   P R O C E S S I N G   *******************
 *************************************************************************/
 
-control MyIngress(inout headers hdr,
-                  inout metadata meta,
-                  inout standard_metadata_t standard_metadata) {
+control TopPipe(inout Parsed_packet p,
+                inout user_metadata_t user_metadata,
+                inout digest_data_t digest_data,
+                inout sume_metadata_t sume_metadata) {
     action drop() {
         mark_to_drop();
     }
-    
+
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
-        standard_metadata.egress_spec = port;
-        hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
-        hdr.ethernet.dstAddr = dstAddr;
-        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+        sume_metadata.dst_port = port;
+        p.ethernet.srcAddr = p.ethernet.dstAddr;
+        p.ethernet.dstAddr = dstAddr;
+        p.ipv4.ttl = p.ipv4.ttl - 1;
     }
-    
+
     table ipv4_lpm {
         key = {
-            hdr.ipv4.dstAddr: lpm;
+            p.ipv4.dstAddr: lpm;
         }
         actions = {
             ipv4_forward;
@@ -107,47 +109,13 @@ control MyIngress(inout headers hdr,
             NoAction;
         }
         size = 1024;
-        default_action = drop();
+        default_action = NoAction();
     }
-    
+
     apply {
-        if (hdr.ipv4.isValid()) {
+        if (p.ipv4.isValid()) {
             ipv4_lpm.apply();
         }
-    }
-}
-
-/*************************************************************************
-****************  E G R E S S   P R O C E S S I N G   *******************
-*************************************************************************/
-
-control MyEgress(inout headers hdr,
-                 inout metadata meta,
-                 inout standard_metadata_t standard_metadata) {
-    apply {  }
-}
-
-/*************************************************************************
-*************   C H E C K S U M    C O M P U T A T I O N   **************
-*************************************************************************/
-
-control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
-     apply {
-	update_checksum(
-	    hdr.ipv4.isValid(),
-            { hdr.ipv4.version,
-	      hdr.ipv4.ihl,
-              hdr.ipv4.diffserv,
-              hdr.ipv4.totalLen,
-              hdr.ipv4.identification,
-              hdr.ipv4.flags,
-              hdr.ipv4.fragOffset,
-              hdr.ipv4.ttl,
-              hdr.ipv4.protocol,
-              hdr.ipv4.srcAddr,
-              hdr.ipv4.dstAddr },
-            hdr.ipv4.hdrChecksum,
-            HashAlgorithm.csum16);
     }
 }
 
@@ -155,10 +123,15 @@ control MyComputeChecksum(inout headers  hdr, inout metadata meta) {
 ***********************  D E P A R S E R  *******************************
 *************************************************************************/
 
-control MyDeparser(packet_out packet, in headers hdr) {
+@Xilinx_MaxPacketRegion(1024)
+control TopDeparser(packet_out b,
+                    in Parsed_packet p,
+                    in user_metadata_t user_metadata,
+                    inout digest_data_t digest_data,
+                    inout sume_metadata_t sume_metadata) {
     apply {
-        packet.emit(hdr.ethernet);
-        packet.emit(hdr.ipv4);
+        b.emit(p.ethernet);
+        b.emit(p.ipv4);
     }
 }
 
@@ -166,11 +139,4 @@ control MyDeparser(packet_out packet, in headers hdr) {
 ***********************  S W I T C H  *******************************
 *************************************************************************/
 
-V1Switch(
-MyParser(),
-MyVerifyChecksum(),
-MyIngress(),
-MyEgress(),
-MyComputeChecksum(),
-MyDeparser()
-) main;
+SimpleSumeSwitch(TopParser(), TopPipe(), TopDeparser()) main;
