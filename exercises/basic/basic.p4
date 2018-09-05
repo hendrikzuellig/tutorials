@@ -60,24 +60,10 @@ parser TopParser(packet_in b,
                 out user_metadata_t user_metadata,
                 out digest_data_t digest_data,
                 inout sume_metadata_t sume_metadata) {
-
     state start {
-        transition parse_ethernet;
-    }
-
-    state parse_ethernet {
-        b.extract(p.ethernet);
-        transition select(p.ethernet.etherType) {
-            TYPE_IPV4: parse_ipv4;
-            default: accept;
-        }
-    }
-
-    state parse_ipv4 {
-        b.extract(p.ipv4);
+        /* TODO: add parser logic */
         transition accept;
     }
-
 }
 
 /*************************************************************************
@@ -93,10 +79,7 @@ control TopPipe(inout Parsed_packet p,
     }
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
-        sume_metadata.dst_port = port;
-        p.ethernet.srcAddr = p.ethernet.dstAddr;
-        p.ethernet.dstAddr = dstAddr;
-        p.ipv4.ttl = p.ipv4.ttl - 1;
+        /* TODO: fill out code in action body */
     }
 
     table ipv4_lpm {
@@ -113,9 +96,10 @@ control TopPipe(inout Parsed_packet p,
     }
 
     apply {
-        if (p.ipv4.isValid()) {
-            ipv4_lpm.apply();
-        }
+        /* TODO: fix ingress control logic
+         *  - ipv4_lpm should be applied only when IPv4 header is valid
+         */
+        ipv4_lpm.apply();
     }
 }
 
@@ -130,8 +114,7 @@ control TopDeparser(packet_out b,
                     inout digest_data_t digest_data,
                     inout sume_metadata_t sume_metadata) {
     apply {
-        b.emit(p.ethernet);
-        b.emit(p.ipv4);
+        /* TODO: add deparser logic */
     }
 }
 

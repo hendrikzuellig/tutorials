@@ -6,10 +6,9 @@ set -x
 set -e
 
 BMV2_BRANCH="skt/ssstarget"
-BMV2_COMMIT="7e25eeb19d01eee1a8e982dc7ee90ee438c10a05"
-PI_COMMIT="219b3d67299ec09b49f433d7341049256ab5f512"
+PI_COMMIT="235cb3d117f3b8a3335200ab89f2f6389f6fdb9c"
 P4C_BRANCH="skt/sume-bmv2-backend"
-P4C_COMMIT="48a57a6ae4f96961b74bd13f6bdeac5add7bb815"
+TUTORIALS_BRANCH="skt/sume-arch"
 PROTOBUF_COMMIT="v3.2.0"
 GRPC_COMMIT="v1.3.2"
 
@@ -56,7 +55,7 @@ sudo pip install grpcio
 # BMv2 deps (needed by PI)
 git clone https://github.com/sktollman/behavioral-model.git
 cd behavioral-model
-git checkout ${BMV2_BRANCH}#${BMV2_COMMIT}
+git checkout ${BMV2_BRANCH}
 # From bmv2's install_deps.sh, we can skip apt-get install.
 # Nanomsg is required by p4runtime, p4runtime is needed by BMv2...
 tmpdir=`mktemp -d -p .`
@@ -89,7 +88,7 @@ make -j${NUM_CORES}
 sudo make install
 sudo ldconfig
 # Simple_switch_grpc target
-cd targets/simple_switch_grpc
+cd targets/simple_sume_switch_grpc
 ./autogen.sh
 ./configure --with-thrift
 make -j${NUM_CORES}
@@ -102,7 +101,7 @@ cd ..
 # P4C
 git clone https://github.com/sktollman/p4c
 cd p4c
-git checkout ${P4C_BRANCH}#${P4C_COMMIT}
+git checkout ${P4C_BRANCH}
 git submodule update --init --recursive
 mkdir -p build
 cd build
@@ -117,6 +116,9 @@ cd ..
 # Tutorials
 sudo pip install crcmod
 git clone https://github.com/sktollman/tutorials
+cd tutorials
+git checkout ${TUTORIALS_BRANCH}
+cd ..
 sudo mv tutorials /home/p4
 sudo chown -R p4:p4 /home/p4/tutorials
 
