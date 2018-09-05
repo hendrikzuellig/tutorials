@@ -4,33 +4,33 @@
   "bmv2_json": "build/basic_tunnel.json",
   "table_entries": [
     {
-      "table": "MyIngress.ipv4_lpm",
+      "table": "TopPipe.ipv4_lpm",
       "match": {
-        "hdr.ipv4.dstAddr": ["10.0.1.1", 32]
+        "p.ipv4.dstAddr": ["10.0.1.1", 32]
       },
-      "action_name": "MyIngress.ipv4_forward",
+      "action_name": "TopPipe.ipv4_forward",
       "action_params": {
         "dstAddr": "00:00:00:01:02:00",
         "port": 2
       }
     },
     {
-      "table": "MyIngress.ipv4_lpm",
+      "table": "TopPipe.ipv4_lpm",
       "match": {
-        "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
+        "p.ipv4.dstAddr": ["10.0.2.2", 32]
       },
-      "action_name": "MyIngress.ipv4_forward",
+      "action_name": "TopPipe.ipv4_forward",
       "action_params": {
         "dstAddr": "00:00:00:00:02:02",
         "port": 1
       }
     },
     {
-      "table": "MyIngress.ipv4_lpm",
+      "table": "TopPipe.ipv4_lpm",
       "match": {
-        "hdr.ipv4.dstAddr": ["10.0.3.3", 32]
+        "p.ipv4.dstAddr": ["10.0.3.3", 32]
       },
-      "action_name": "MyIngress.ipv4_forward",
+      "action_name": "TopPipe.ipv4_forward",
       "action_params": {
         "dstAddr": "00:00:00:03:02:00",
         "port": 3
@@ -38,31 +38,31 @@
     },
 
     {
-      "table": "MyIngress.myTunnel_exact",
+      "table": "TopPipe.myTunnel_exact",
       "match": {
-        "hdr.myTunnel.dst_id": [1]
+        "p.myTunnel.dst_id": [1]
       },
-      "action_name": "MyIngress.myTunnel_forward",
+      "action_name": "TopPipe.myTunnel_forward",
       "action_params": {
         "port": 2
       }
     },
     {
-      "table": "MyIngress.myTunnel_exact",
+      "table": "TopPipe.myTunnel_exact",
       "match": {
-        "hdr.myTunnel.dst_id": [2]
+        "p.myTunnel.dst_id": [2]
       },
-      "action_name": "MyIngress.myTunnel_forward",
+      "action_name": "TopPipe.myTunnel_forward",
       "action_params": {
         "port": 1
       }
     },
     {
-      "table": "MyIngress.myTunnel_exact",
+      "table": "TopPipe.myTunnel_exact",
       "match": {
-        "hdr.myTunnel.dst_id": [3]
+        "p.myTunnel.dst_id": [3]
       },
-      "action_name": "MyIngress.myTunnel_forward",
+      "action_name": "TopPipe.myTunnel_forward",
       "action_params": {
         "port": 3
       }

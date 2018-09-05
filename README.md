@@ -1,10 +1,6 @@
 # Sume
 
-This branch uses the Simple Sume Switch Architecture instead of the V1Model.
-
-## Todo:
-
-* Should the target be called NetFPGA instead of Sume?
+This branch of `tutorials` uses the Simple Sume Switch Architecture instead of the V1Model. The virtual machine is built with a version of `behavioral-model` and `p4c` that support this architecture. Note that the `PI` commit has been updated which required some minor changes to the python helpers. Currently only the `basic` and `basic_tunnel` exercises are supported.
 
 # P4 Tutorial
 

@@ -8,7 +8,7 @@ const bit<16> TYPE_IPV4 = 0x800;
 *********************** H E A D E R S  ***********************************
 *************************************************************************/
 
-typedef bit<9>  egressSpec_t;
+typedef bit<8>  egressSpec_t;
 typedef bit<48> macAddr_t;
 typedef bit<32> ip4Addr_t;
 
@@ -74,7 +74,7 @@ parser TopParser(packet_in b,
     }
 
     state parse_ipv4 {
-        packet.extract(p.ipv4);
+        b.extract(p.ipv4);
         transition accept;
     }
 
@@ -89,7 +89,7 @@ control TopPipe(inout Parsed_packet p,
                 inout digest_data_t digest_data,
                 inout sume_metadata_t sume_metadata) {
     action drop() {
-        mark_to_drop();
+        sume_metadata.dst_port = 0;
     }
 
     action ipv4_forward(macAddr_t dstAddr, egressSpec_t port) {
