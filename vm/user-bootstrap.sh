@@ -5,10 +5,10 @@ set -x
 # Exit on errors.
 set -e
 
-BMV2_BRANCH="skt/ssstarget"
+BMV2_BRANCH="si/skt/SimpleSumeSwitch"
 PI_COMMIT="235cb3d117f3b8a3335200ab89f2f6389f6fdb9c"
-P4C_BRANCH="skt/sume-bmv2-backend"
-TUTORIALS_BRANCH="skt/sume-arch"
+P4C_BRANCH="si/skt/SimpleSumeSwitch"
+TUTORIALS_BRANCH="si/skt/SimpleSumeSwitch"
 PROTOBUF_COMMIT="v3.2.0"
 GRPC_COMMIT="v1.3.2"
 
@@ -53,7 +53,7 @@ cd ..
 sudo pip install grpcio
 
 # BMv2 deps (needed by PI)
-git clone https://github.com/sktollman/behavioral-model.git
+git clone https://github.com/CS344-Stanford/behavioral-model.git
 cd behavioral-model
 git checkout ${BMV2_BRANCH}
 # From bmv2's install_deps.sh, we can skip apt-get install.
@@ -99,7 +99,7 @@ cd ..
 cd ..
 
 # P4C
-git clone https://github.com/sktollman/p4c
+git clone https://github.com/CS344-Stanford/p4c.git
 cd p4c
 git checkout ${P4C_BRANCH}
 git submodule update --init --recursive
@@ -115,7 +115,7 @@ cd ..
 
 # Tutorials
 sudo pip install crcmod
-git clone https://github.com/sktollman/tutorials
+git clone https://github.com/CS344-Stanford/tutorials.git
 cd tutorials
 git checkout ${TUTORIALS_BRANCH}
 cd ..
