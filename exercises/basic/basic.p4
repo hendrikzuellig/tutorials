@@ -61,6 +61,8 @@ parser TopParser(packet_in b,
                 out digest_data_t digest_data,
                 inout sume_metadata_t sume_metadata) {
     state start {
+        user_metadata.unused = 0;
+        digest_data.unused = 0;
         /* TODO: add parser logic */
         transition accept;
     }

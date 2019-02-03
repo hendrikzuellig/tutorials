@@ -1,5 +1,3 @@
-BMV2_SWITCH_EXE = simple_sume_switch_grpc
-NO_P4 = true
-P4C_ARGS = --p4runtime-file $(basename $@).p4info --p4runtime-format text
+BMV2_SWITCH_EXE = simple_sume_switch
 
 include ../../utils/Makefile
