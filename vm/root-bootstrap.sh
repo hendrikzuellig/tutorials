@@ -57,6 +57,9 @@ apt-get install -y --no-install-recommends \
   python-pip \
   python-scapy \
   python-setuptools \
+  python-ipaddress \
+  python-networkx \
+  python-matplotlib \
   sublime-text-installer \
   tcpdump \
   unzip \
