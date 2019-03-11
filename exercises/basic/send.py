@@ -11,7 +11,7 @@ from scapy.all import Ether, IP, UDP, TCP
 
 def get_if():
     ifs=get_if_list()
-    iface=None # "h1-eth0"
+    iface=None
     for i in get_if_list():
         if "eth0" in i:
             iface=i
