@@ -187,7 +187,7 @@ class ExerciseRunner:
         sleep(1)
 
         # some programming that must happen after the net has started
-#        self.program_hosts()
+        self.program_hosts()
         self.program_switches()
 
         # wait for that to finish. Not sure how to do this better
@@ -301,30 +301,13 @@ class ExerciseRunner:
                 self.program_switch_p4runtime(sw_name, sw_dict)
 
     def program_hosts(self):
-        """ Adds static ARP entries and default routes to each mininet host.
-
-            Assumes:
-                - A mininet instance is stored as self.net and self.net.start() has
-                  been called.
+        """ Execute any provided commands on each Mininet hosts
         """
         for host_name, host_info in self.hosts.items():
             h = self.net.get(host_name)
-            h_iface = h.intfs.values()[0]
-            link = h_iface.link
-
-            sw_iface = link.intf1 if link.intf1 != h_iface else link.intf2
-            # phony IP to lie to the host about
-            host_id = int(host_name[1:])
-            sw_ip = '10.0.%d.254' % host_id
-
-            # Ensure each host's interface name is unique, or else
-            # mininet cannot shutdown gracefully
-            h.defaultIntf().rename('%s-eth0' % host_name)
-            # static arp entries and default routes
-            h.cmd('arp -i %s -s %s %s' % (h_iface.name, sw_ip, sw_iface.mac))
-            h.cmd('ethtool --offload %s rx off tx off' % h_iface.name)
-            h.cmd('ip route add %s dev %s' % (sw_ip, h_iface.name))
-            h.setDefaultRoute("via %s" % sw_ip)
+            if "commands" in host_info:
+                for cmd in host_info["commands"]:
+                    h.cmd(cmd)
 
 
     def do_net_cli(self):
