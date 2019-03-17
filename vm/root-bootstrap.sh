@@ -62,6 +62,7 @@ apt-get install -y --no-install-recommends \
   python-matplotlib \
   sublime-text-installer \
   tcpdump \
+  traceroute \
   unzip \
   vim \
   wget \

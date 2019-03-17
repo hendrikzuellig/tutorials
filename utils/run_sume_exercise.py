@@ -335,7 +335,7 @@ class ExerciseRunner:
         if self.switch_json:
             print('To inspect or change the switch configuration, connect to')
             print('its CLI from your host operating system using this command:')
-            print('  simple_switch_CLI --thrift-port <switch thrift port>')
+            print('  runtime_CLI --thrift-port <switch thrift port>')
             print('')
         print('To view a switch log, run this command from your host OS:')
         print('  tail -f %s/<switchname>.log' %  self.log_dir)
