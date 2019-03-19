@@ -99,7 +99,8 @@ control TopPipe(inout Parsed_packet p,
         p.ethernet.srcAddr = p.ethernet.dstAddr;
         p.ethernet.dstAddr = dstAddr;
         p.ipv4.ttl = p.ipv4.ttl - 1;
-        p.ipv4.hdrChecksum = p.ipv4.hdrChecksum + 256;
+        bit<17> chksum = (bit<17>)p.ipv4.hdrChecksum + 256;
+        p.ipv4.hdrChecksum = chksum[15:0] + (bit<16>)chksum[16:16];
     }
 
     table ipv4_lpm {
