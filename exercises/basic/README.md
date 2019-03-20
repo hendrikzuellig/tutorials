@@ -12,7 +12,8 @@ for every packet: (i) update the source and destination MAC addresses,
 the IP checksum, and (iv) forward the packet out the appropriate port.
 
 To update the IP checksum you can use the fact that decrementing the
-TTL field by one corresponds to incrementing the checksum by 256.
+TTL field by one corresponds to incrementing the checksum by 256 (plus
+the overflow bit).
 
 Your switch will have a single table, which the control plane will
 populate with static rules. Each rule will map an IP address to the
@@ -149,15 +150,37 @@ make stop
 Please answer the following questions in the README file of your simple_router
 project.
 
-1. What would happen if you try to traceroute through this router?
-2. What happensi to the number of routing table entries when the router
-   is connected to a large subnet with many hosts?
-3. What is a better way to format the routing table and why does that 
-   help reduce the required number of entries?
-4. What happens when this router receives a packet with a corrupt checksum?
-5. Explain how MAC address are assigned to router interfaces in this design.
+1. What would happen if you try to traceroute through this router? Explain
+   what the router would need to do differently for traceroute to work.
+2. What happens to the number of routing table entries when this router
+   is connected to a large L2 network with many hosts? Can you think of a
+   way to decouple forwarding decisions from MAC address updates?
+3. Explain how MAC address are assigned to router interfaces in this design.
    How should they be assigned to router interfaces on a real router?
-6. Why do we need to run `# arp -i eth0 -s <IP> <MAC>` on each host upon
+4. Why do we need to run `# arp -i eth0 -s <IP> <MAC>` on each host upon
    initializing the topology? What additional functionality needs to be added
    to the router to avoid this?
+5. What happens when you try to ping 10.1.2.3 from one of the hosts? What
+   should happen if the router was implemented correctly?
+6. This design uses a longest-prefix-match to implement the routing table. LPM
+   tables are currently not well supported in SDNet, so we will instead use a
+   ternary match table. How would you translate the following LPM table into a
+   ternary match table?
+
+   LPM Table:
+
+   Prefix   | Prefix length | data
+   ---------|---------------|-----
+   10.1.0.0 | 16            | XXX
+   10.1.2.0 | 24            | YYY
+   10.0.0.0 | 8             | ZZZ
+
+
+   Ternary Table:
+
+   Prefix   |     Mask    | priority | data
+   ---------|-------------|----------|-----
+            |             |          |
+            |             |          |
+            |             |          |
 

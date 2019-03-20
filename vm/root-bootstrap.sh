@@ -23,6 +23,7 @@ apt-get install -y --no-install-recommends \
   emacs24 \
   flex \
   git \
+  iperf3 \
   libboost-dev \
   libboost-filesystem-dev \
   libboost-iostreams1.58-dev \
