@@ -1,0 +1,38 @@
+
+table_add local_mac_table NoAction 08:11:11:11:11:11 =>
+table_add local_mac_table NoAction 08:12:12:12:12:13 =>
+table_add local_mac_table NoAction 08:16:16:16:16:17 =>
+table_add local_mac_table NoAction ff:ff:ff:ff:ff:ff =>
+
+table_add local_ip_table send_to_cpu_cp 10.6.0.3 0 => 1
+table_add local_ip_table send_to_cpu_cp 10.6.1.3 0 => 1
+table_add local_ip_table send_to_cpu_cp 10.6.2.3 0 => 1
+table_add local_ip_table send_to_cpu_cp 224.0.0.5 0 => 1
+
+table_add arp_cache_table update_dst_mac 10.6.0.2   => 08:11:11:11:11:00
+table_add arp_cache_table update_dst_mac 10.6.1.2   => 08:12:12:12:12:12
+table_add arp_cache_table update_dst_mac 10.6.2.2   => 08:16:16:16:16:16
+table_add arp_cache_table update_dst_mac 224.0.0.5  => ff:ff:ff:ff:ff:ff
+
+table_add routing_table ipv4_forward 224.0.0.5&&&0xffffffff => 0b00000000 224.0.0.5 0
+table_add routing_table ipv4_forward 50.64.3.7&&&0xffffffff => 0b00010000 50.64.3.7 1
+table_add routing_table ipv4_forward 10.6.0.2&&&0xfffffffe => 0b00000001 0.0.0.0 2
+table_add routing_table ipv4_forward 10.6.1.2&&&0xfffffffe => 0b00000100 0.0.0.0 3
+table_add routing_table ipv4_forward 10.6.2.2&&&0xfffffffe => 0b00010000 0.0.0.0 4
+table_add routing_table ipv4_forward 10.1.0.2&&&0xfffffffe => 0b00000100 10.6.1.2 5
+
+table_add update_smac_table update_src_mac 0b00000001 => 08:11:11:11:11:11
+table_add update_smac_table update_src_mac 0b00000100 => 08:12:12:12:12:13
+table_add update_smac_table update_src_mac 0b00010000 => 08:16:16:16:16:17
+
+table_add update_dport_table update_dst_port 08:11:11:11:11:11 => 0b00000001
+table_add update_dport_table update_dst_port 08:12:12:12:12:13 => 0b00000100
+table_add update_dport_table update_dst_port 08:16:16:16:16:17 => 0b00010000
+
+table_add arp_reply_table send_to_cpu_arp_reply 10.6.0.3 0b00000001 =>
+table_add arp_reply_table send_to_cpu_arp_reply 10.6.1.3 0b00000100 =>
+table_add arp_reply_table send_to_cpu_arp_reply 10.6.2.3 0b00010000 =>
+
+table_add arp_req_table swap_arp_headers 10.6.0.3 0b00000001 => 08:11:11:11:11:11
+table_add arp_req_table swap_arp_headers 10.6.1.3 0b00000100 => 08:12:12:12:12:13
+table_add arp_req_table swap_arp_headers 10.6.2.3 0b00010000 => 08:16:16:16:16:17

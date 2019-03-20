@@ -23,6 +23,7 @@ apt-get install -y --no-install-recommends \
   emacs24 \
   flex \
   git \
+  iperf3 \
   libboost-dev \
   libboost-filesystem-dev \
   libboost-iostreams1.58-dev \
@@ -57,8 +58,12 @@ apt-get install -y --no-install-recommends \
   python-pip \
   python-scapy \
   python-setuptools \
+  python-ipaddress \
+  python-networkx \
+  python-matplotlib \
   sublime-text-installer \
   tcpdump \
+  traceroute \
   unzip \
   vim \
   wget \

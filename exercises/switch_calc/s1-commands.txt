@@ -1,0 +1,4 @@
+table_add lookup_table set_result 0x00000000 => 0x00000001 
+table_add lookup_table set_result 0x00000001 => 0x00000010 
+table_add lookup_table set_result 0x00000002 => 0x00000100 
+table_add lookup_table set_result 0x00000003 => 0x00001000 

@@ -54,7 +54,7 @@ struct digest_data_t {
 *********************** P A R S E R  ***********************************
 *************************************************************************/
 
-@Xilinx_MaxPacketRegion(1024)
+@Xilinx_MaxPacketRegion(16384)
 parser TopParser(packet_in b,
                 out Parsed_packet p,
                 out user_metadata_t user_metadata,
@@ -99,6 +99,8 @@ control TopPipe(inout Parsed_packet p,
         p.ethernet.srcAddr = p.ethernet.dstAddr;
         p.ethernet.dstAddr = dstAddr;
         p.ipv4.ttl = p.ipv4.ttl - 1;
+        bit<17> chksum = (bit<17>)p.ipv4.hdrChecksum + 256;
+        p.ipv4.hdrChecksum = chksum[15:0] + (bit<16>)chksum[16:16];
     }
 
     table ipv4_lpm {
@@ -125,7 +127,7 @@ control TopPipe(inout Parsed_packet p,
 ***********************  D E P A R S E R  *******************************
 *************************************************************************/
 
-@Xilinx_MaxPacketRegion(1024)
+@Xilinx_MaxPacketRegion(16384)
 control TopDeparser(packet_out b,
                     in Parsed_packet p,
                     in user_metadata_t user_metadata,

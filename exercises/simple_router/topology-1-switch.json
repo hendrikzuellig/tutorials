@@ -1,0 +1,14 @@
+{
+    "hosts": {
+        "h1": {"ip": "10.10.10.11/31", "mac": "08:10:10:10:10:11",
+               "commands":["route add -net 20.20.20.20 netmask 255.255.255.254 gw 10.10.10.10 dev eth0"]},
+        "h2": {"ip": "20.20.20.21/31", "mac": "08:20:20:20:20:21",
+               "commands":["route add -net 10.10.10.10 netmask 255.255.255.254 gw 20.20.20.20 dev eth0"]}
+    },
+    "switches": {
+        "s1": {"cli_input": "s1-commands.txt"}
+    },
+    "links": [
+        ["h1", "s1-nf0"], ["h2", "s1-nf1"]
+    ]
+}

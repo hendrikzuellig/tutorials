@@ -87,15 +87,8 @@ cd behavioral-model
 make -j${NUM_CORES}
 sudo make install
 sudo ldconfig
-## Simple_switch_grpc target
-#cd targets/simple_sume_switch_grpc
-#./autogen.sh
-#./configure --with-thrift
-#make -j${NUM_CORES}
-#sudo make install
-#sudo ldconfig
-#cd ..
-#cd ..
+# install runtime_CLI
+sudo cp targets/simple_sume_switch/runtime_CLI /usr/local/bin/
 cd ..
 
 # P4C
