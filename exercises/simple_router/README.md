@@ -18,9 +18,9 @@
   
 **Single Switch Topology**
 
-![single-router-topo](single-router-topo)
+![single-router-topo](single-router-topo.png)
 
 **Triangle Topology**
 
-![triangle-topo](triangle-topo)
+![triangle-topo](triangle-topo.png)
 
