@@ -14,4 +14,13 @@
   `# ./control_plane.py --mode bmv2 --thrift_port 9090 --iface s1-eth1 --config topos/single-router.json`
 * Open xterm on hosts:
   `mininet> xterm h1 h2`
+  
+  
+**Single Switch Topology**
+
+![single-router-topo](single-router-topo)
+
+**Triangle Topology**
+
+![triangle-topo](triangle-topo)
 
