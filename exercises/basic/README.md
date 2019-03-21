@@ -21,6 +21,10 @@ MAC address and output port for the next hop. We have already defined
 the control plane rules, so you only need to implement the data plane
 logic of your P4 program.
 
+Here is an image of the topology that we will be using for this exercise:
+
+![triangle-topo](basic-topo.png)
+
 > **Spoiler alert:** There is a reference solution in the `solution`
 > sub-directory. Feel free to compare your implementation to the
 > reference.
@@ -162,7 +166,10 @@ project.
    to the router to avoid this?
 5. What happens when you try to ping 10.1.2.3 from one of the hosts? What
    should happen if the router was implemented correctly?
-6. This design uses a longest-prefix-match to implement the routing table. LPM
+6. Break the link between s1 and s2 by running: `mininet> link s1 s2 down`
+   What happens when you try to ping h2 from h1? In one or two sentences, describe
+   how the router needs to change in order to be robust to link failures.
+7. This design uses a longest-prefix-match to implement the routing table. LPM
    tables are currently not well supported in SDNet, so we will instead use a
    ternary match table. How would you translate the following LPM table into a
    ternary match table?
@@ -180,7 +187,4 @@ project.
 
    Prefix   |     Mask    | priority | data
    ---------|-------------|----------|-----
-            |             |          |
-            |             |          |
-            |             |          |
 
