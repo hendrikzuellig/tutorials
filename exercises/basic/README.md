@@ -23,7 +23,7 @@ logic of your P4 program.
 
 Here is an image of the topology that we will be using for this exercise:
 
-![triangle-topo](basic-topo.png)
+![basic-topo](basic-topo.png)
 
 > **Spoiler alert:** There is a reference solution in the `solution`
 > sub-directory. Feel free to compare your implementation to the
