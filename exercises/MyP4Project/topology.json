@@ -1,0 +1,14 @@
+{
+    "hosts": {
+      "h1": {"ip": "10.0.1.1/24", "mac": "08:11:11:11:11:08",
+             "commands":["route add default gw 10.0.1.10 dev eth0"]},
+      "h2": {"ip": "10.0.1.2/24", "mac": "08:22:22:22:22:08",
+             "commands":["route add default gw 10.0.2.20 dev eth0"]}
+    },
+    "switches": {
+        "s1": {"cli_input": "s1-commands.txt"}
+    },
+    "links": [
+        ["h1", "s1-nf0"], ["h2", "s1-nf1"]
+    ]
+}
